@@ -107,7 +107,8 @@ resource "aws_security_group_rule" "vpn_943" {
   cidr_blocks = ["0.0.0.0/0"]
   security_group_id = module.vpn.sg_id
 }
-
+#EKS control plane to accept connection from eks node. Should all traffic in between plan
+# node
 resource "aws_security_group_rule" "eks_control_plane_eks_node" {
   type              = "ingress"
   from_port        = 0
@@ -116,7 +117,7 @@ resource "aws_security_group_rule" "eks_control_plane_eks_node" {
   source_security_group_id = module.eks_node.sg_id
   security_group_id = module.eks_control_plane.sg_id
 }
-
+#Node also accept from plane and allow all ports
 resource "aws_security_group_rule" "eks_node_eks_control_plane" {
   type              = "ingress"
   from_port        = 0
@@ -126,6 +127,7 @@ resource "aws_security_group_rule" "eks_node_eks_control_plane" {
   security_group_id = module.eks_node.sg_id
 }
 
+#EKS to accept from bastion via 443 so that can be accessed https connection securly
 resource "aws_security_group_rule" "eks_control_plane_bastion" {
   type              = "ingress"
   from_port        = 443
@@ -134,7 +136,7 @@ resource "aws_security_group_rule" "eks_control_plane_bastion" {
   source_security_group_id = module.bastion.sg_id
   security_group_id = module.eks_control_plane.sg_id
 }
-
+#Node to accept from bastion on port 22 to ssh into node
 resource "aws_security_group_rule" "eks_node_bastion" {
   type              = "ingress"
   from_port        = 22
@@ -143,7 +145,7 @@ resource "aws_security_group_rule" "eks_node_bastion" {
   source_security_group_id = module.bastion.sg_id
   security_group_id = module.eks_node.sg_id
 }
-
+#EKS node from VPC also all traffic 
 resource "aws_security_group_rule" "eks_node_vpc" {
   type              = "ingress"
   from_port         = 0
