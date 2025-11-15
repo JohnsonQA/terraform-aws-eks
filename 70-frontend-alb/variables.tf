@@ -7,9 +7,9 @@ variable "environment" {
 }
 
 variable "zone_id" {
-    default = "Z032558618100M4EJX8X4"
+    default = "Z0565168946IP9W7JODJ"
 }
 
 variable "zone_name" {
-    default = "daws84s.site"
+    default = "roboshop.space"
 }
